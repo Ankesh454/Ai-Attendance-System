@@ -61,9 +61,43 @@ def style_base_layout():
                     line-height: 1.1 !important;
                     margin-bottom: 1rem !important;            
                 }
+                
 
                 h3,h4,p{
                     font-family: 'Outfit',sans-serif !important;
+                    
+                }
+                h3{
+                    color: black !important;
+                }
+                input{
+                    background-color: white !important;
+                    color: black !important;
+                }
+
+                input::placeholder{
+                    color: #9A9A9A !important;
+                    opacity: 1 !important;
+                }
+                div[data-testid="stCameraInput"] label p,
+                div[data-testid="stCameraInput"] small {
+                    color: black !important;
+                }
+                div[data-testid="stAudioInput"] label p,
+                div[data-testid="stAudioInput"] small {
+                    color: black !important;
+                }
+
+                div[data-testid="stTextInput"] label p{
+                    color: black !important;
+                }
+                div[data-testid="stSelectbox"] label p{
+                    color: black !important;
+                }
+                hr {
+                    border: none !important;
+                    border-top: 2px solid #D0D0D0 !important;
+                    margin: 2rem 0 !important;
                 }
 
                 button{
@@ -93,7 +127,17 @@ def style_base_layout():
                 }
 
                 button:hover{
-                    transform:scale(1.05)}
+                    transform:scale(1.05);
+                }
+                [data-testid="stDialog"] > div {
+                    background: white !important;
+                    color: black !important;
+                }
+                [data-testid="stDialog"] p {
+                    color: black !important;
+                }
+                [data-testid="stDialog"] .stButton > button p {
+                    color: white !important;
                 }
 
             </style>
