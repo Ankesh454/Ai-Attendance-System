@@ -34,7 +34,12 @@ def get_face_embeddings(image_np):
 
         shape = shapePredictor(image_np, face)
 
-        face_descriptor = faceRecog.compute_face_descriptor(image_np,shape,1)
+        face_descriptor = faceRecog.compute_face_descriptor(
+            image_np,
+            shape,
+            1
+        )
+
         encodings.append(np.array(face_descriptor))
 
     return encodings
@@ -56,18 +61,28 @@ def get_trained_model():
         embedding = student.get("face_embedding")
 
         if embedding is not None:
-            X.append(np.array(embedding, dtype=np.float32))
+
+            embedding = np.array(
+                embedding,
+                dtype=np.float32
+            )
+
+            X.append(embedding)
             y.append(student.get("student_id"))
 
     if len(X) == 0:
         return None
 
-    return {"X": X,"y": y}
+    return {
+        "X": X,
+        "y": y
+    }
 
 
 def train_classifier():
 
     st.cache_resource.clear()
+
     model_data = get_trained_model()
 
     return model_data is not None
@@ -75,7 +90,10 @@ def train_classifier():
 
 def predict_attendance(class_image_np):
 
-    class_image_np = np.asarray(class_image_np,dtype=np.uint8)
+    class_image_np = np.asarray(
+        class_image_np,
+        dtype=np.uint8
+    )
 
     encodings = get_face_embeddings(class_image_np)
 
@@ -85,33 +103,65 @@ def predict_attendance(class_image_np):
 
     if model_data is None:
 
-        return detected_students,[],len(encodings)
+        return detected_students, [], len(encodings)
 
     X_train = model_data["X"]
     y_train = model_data["y"]
 
-    all_students = sorted(list(set(y_train)))
+    all_students = sorted(
+        list(set(y_train))
+    )
 
-    resemblance_threshold = 0.6
+    resemblance_threshold = 0.50
+    minimum_gap = 0.05
 
     for encoding in encodings:
 
-        best_distance = float("inf")
-        best_student_id = None
+        distances = []
 
-        for student_embedding, student_id in zip(X_train,y_train):
+        for student_embedding, student_id in zip(
+            X_train,
+            y_train
+        ):
+
             distance = np.linalg.norm(
                 student_embedding - encoding
             )
-            if distance < best_distance:
 
-                best_distance = distance
-                best_student_id = student_id
+            distances.append(
+                (distance, student_id)
+            )
 
-        if(best_student_id is not None and best_distance <= resemblance_threshold):
-            detected_students[
-                int(best_student_id)
-            ] = True
+        if not distances:
+            continue
 
-    return detected_students,all_students,len(encodings)
-    
+        distances.sort(
+            key=lambda x: x[0]
+        )
+
+        best_distance, best_student_id = distances[0]
+
+        second_best_distance = float("inf")
+
+        if len(distances) > 1:
+            second_best_distance = distances[1][0]
+
+        if best_distance > resemblance_threshold:
+            continue
+
+        if (
+            second_best_distance != float("inf")
+            and
+            (second_best_distance - best_distance) < minimum_gap
+        ):
+            continue
+
+        detected_students[
+            int(best_student_id)
+        ] = True
+
+    return (
+        detected_students,
+        all_students,
+        len(encodings)
+    )
