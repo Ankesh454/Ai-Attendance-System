@@ -40,7 +40,9 @@ def get_face_embeddings(image_np):
             1
         )
 
-        encodings.append(np.array(face_descriptor))
+        encodings.append(
+            np.array(face_descriptor, dtype=np.float32)
+        )
 
     return encodings
 
@@ -112,8 +114,11 @@ def predict_attendance(class_image_np):
         list(set(y_train))
     )
 
-    resemblance_threshold = 0.50
-    minimum_gap = 0.05
+    # Strict face matching
+    resemblance_threshold = 0.45
+
+    # Required difference between best and second-best match
+    minimum_gap = 0.08
 
     for encoding in encodings:
 
@@ -141,24 +146,23 @@ def predict_attendance(class_image_np):
 
         best_distance, best_student_id = distances[0]
 
-        second_best_distance = float("inf")
-
-        if len(distances) > 1:
-            second_best_distance = distances[1][0]
-
+        # First check absolute similarity
         if best_distance > resemblance_threshold:
             continue
 
-        if (
-            second_best_distance != float("inf")
-            and
-            (second_best_distance - best_distance) < minimum_gap
-        ):
+        # If there is only one registered student,
+        # absolute threshold is enough.
+        if len(distances) == 1:
+            detected_students[int(best_student_id)] = True
             continue
 
-        detected_students[
-            int(best_student_id)
-        ] = True
+        second_best_distance = distances[1][0]
+
+        # Best match should clearly beat second-best match
+        if (second_best_distance - best_distance) < minimum_gap:
+            continue
+
+        detected_students[int(best_student_id)] = True
 
     return (
         detected_students,
