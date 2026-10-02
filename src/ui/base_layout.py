@@ -33,8 +33,19 @@ def style_background_dashboard():
 
     st.markdown("""
             <style>
-                .stApp{
-                    background:#E0E3FF !important;
+                .stApp {
+                    min-height: 100vh;
+
+                    background:
+                        linear-gradient(
+                            135deg,
+                            #EAF6FF 10%,
+                            #EEF3FF 100%,
+                            #F3EEFF 1%
+                        ) !important;
+
+                    overflow: hidden;
+                    position: relative;
                 }
             </style>
         """,
@@ -119,10 +130,19 @@ def style_base_layout():
                     border: none !important;
                     transition: transform 0.25s ease-in-out !important;
                 }
+                
+                button[kind="primary"]{
+                    border-radius: 1.5rem !important;
+                    background: #171A3A !important;
+                    color: white !important;
+                    padding: 10px 20px !important;
+                    border: none !important;
+                    transition: transform 0.25s ease-in-out !important;
+                }
 
                 button[kind="secondary"]{
                     border-radius: 1.5rem !important;
-                    background: #EB459E !important;
+                    background: #526581 !important;
                     color: white !important;
                     padding: 10px 20px !important;
                     border: none !important;
@@ -130,8 +150,8 @@ def style_base_layout():
                 }
                 button[kind="tertiary"]{
                     border-radius: 1.5rem !important;
-                    background: black !important;
-                    color: white !important;
+                    background: rgba(23,37,84,0.18) !important;
+                    color: black !important;
                     padding: 10px 20px !important;
                     border: none !important;
                     transition: transform 0.25s ease-in-out !important;
@@ -140,6 +160,11 @@ def style_base_layout():
                 button:hover{
                     transform:scale(1.05);
                 }
+                .student-portal-button button[data-testid="stBaseButton-primary"] {
+                    background: white !important;
+                    color: white !important;
+                }
+
                 [data-testid="stDialog"] > div {
                     background: white !important;
                     color: black !important;

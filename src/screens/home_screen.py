@@ -39,12 +39,21 @@ def home_screen():
             background: #7C3AED !important;
             color: white !important;
         }
+        div[data-testid="stColumn"]:has(.student-portal-button) button[data-testid="stBaseButton-primary"] {
+            background: #5865F2 !important;
+            color: white !important;
+            border: none !important;
+        }
 
         </style>
         """, unsafe_allow_html=True)
     col1,col2 = st.columns(2,gap='large')
 
     with col1:
+        st.markdown(
+            '<div class="student-portal-button"></div>',
+            unsafe_allow_html=True
+        )
         st.markdown(
             '<div class="student-card-marker"></div>',
             unsafe_allow_html=True
@@ -53,6 +62,7 @@ def home_screen():
             '<h2><span style="color:#17234F;">I\'m</span> <span style="color:#2488F2;">Student</span></h2>',
             unsafe_allow_html=True
         )
+        
         st.image("student.png", width=100)
         if st.button('Student Portal',type='primary',icon=':material/arrow_outward:',icon_position='right'):
             st.session_state['login_type'] = 'student'

@@ -19,7 +19,7 @@ def header_dashboard():
     st.markdown(f"""
         <div style='display:flex; align-items:center; justify-content:center; gap:10px;'>
             <img src='{logo_url}' style='border-radius:30%; height:85px;'/>
-            <div style='text-align:left;color:#5865F2;font-family:"Climate Crisis", sans-serif;font-size:2rem;line-height:1.1;'>
+            <div style='text-align:left;color:#17234F;font-family:"Climate Crisis", sans-serif;font-size:2rem;line-height:1.1;'>
                 SNAP SHOT <br>CLASS
             </div>
         </div>

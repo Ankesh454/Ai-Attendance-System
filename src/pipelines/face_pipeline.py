@@ -125,7 +125,7 @@ def get_trained_model():
 
 def train_classifier():
 
-    st.cache_resource.clear()
+    get_trained_model.clear()
 
     model_data = get_trained_model()
 

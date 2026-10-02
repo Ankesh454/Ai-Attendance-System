@@ -13,9 +13,14 @@ def check_teacher_exists(username):
     response = supabase.table("teachers").select("username").eq("username",username).execute()
     return len(response.data) > 0
 
-def create_teacher(username,password,name):
+def create_teacher(username, password, name, phone_number):
 
-    data = {"username":username, "password":hash_pass(password), "name":name}
+    data = {
+        "username": username,
+        "password": hash_pass(password),
+        "name": name,
+        "phone_number": phone_number}
+
     response = supabase.table("teachers").insert(data).execute()
     return response.data
 
@@ -82,4 +87,36 @@ def create_attendance(logs):
 
 def get_attendance_for_teacher(teacher_id):
     response = supabase.table("attendance_logs").select("*, subjects!inner(*)").eq("subjects.teacher_id",teacher_id).execute()
+    return response.data
+
+
+
+def get_teacher_by_phone(phone_number):
+
+    response = (
+        supabase
+        .table("teachers")
+        .select("*")
+        .eq("phone_number", phone_number)
+        .execute()
+    )
+
+    if response.data:
+        return response.data[0]
+
+    return None
+
+
+def update_teacher_password(teacher_id, new_password):
+
+    response = (
+        supabase
+        .table("teachers")
+        .update({
+            "password": hash_pass(new_password)
+        })
+        .eq("teacher_id", teacher_id)
+        .execute()
+    )
+
     return response.data
