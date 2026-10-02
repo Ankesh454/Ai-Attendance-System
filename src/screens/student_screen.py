@@ -100,7 +100,9 @@ def student_screen():
 
     with c2:
         if st.button("Go back to Home",type='secondary',key='loginbackbtn',shortcut='control+backspace'):
-            st.session_state['login_type'] = None
+            st.session_state.pop("login_type", None)
+            st.session_state.pop("student_data", None)
+            st.session_state["is_logged_in"] = False
             st.rerun()
 
     st.space()
