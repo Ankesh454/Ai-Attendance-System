@@ -187,8 +187,8 @@ def predict_attendance(class_image_np):
             second_best_distance - best_distance
         )
 
-        resemblance_threshold = 0.50
-        minimum_gap = 0.05
+        resemblance_threshold = 0.55
+        minimum_gap = 0.03
 
         if(
             best_student_id == predicted_id
