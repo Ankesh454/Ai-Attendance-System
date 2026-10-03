@@ -103,6 +103,7 @@ def student_screen():
             st.session_state.pop("login_type", None)
             st.session_state.pop("student_data", None)
             st.session_state["is_logged_in"] = False
+            st.session_state.pop("user_role", None)
             st.rerun()
 
     st.space()

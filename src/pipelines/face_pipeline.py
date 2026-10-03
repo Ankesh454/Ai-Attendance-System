@@ -105,7 +105,7 @@ def get_trained_model():
     knn = Pipeline([
         ("scaler", StandardScaler()),
         ("knn", KNeighborsClassifier(
-            n_neighbors=3,
+            n_neighbors=min(3, len(X)),
             metric="euclidean"
         ))
     ])
