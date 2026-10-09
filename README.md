@@ -143,7 +143,9 @@ The database stores information related to:
 ### Machine Learning
 
 * Scikit-learn
+* Logistic Regression
 * SVM
+* KNN
 
 ### Computer Vision
 
