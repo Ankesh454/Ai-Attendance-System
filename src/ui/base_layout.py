@@ -176,6 +176,15 @@ def style_base_layout():
                     color: white !important;
                 }
 
+                /* Make 'AI is scanning..' spinner text clearly visible */
+                div[data-testid="stSpinner"],
+                div[data-testid="stSpinner"] p,
+                div[data-testid="stSpinner"] span {
+                    color: #17234F !important;
+                    font-weight: 700 !important;
+                    font-size: 1.05rem !important;
+                }
+
             </style>
         """,
         unsafe_allow_html=True

@@ -27,9 +27,8 @@ def student_dashboard():
         if st.button("Logout",type='secondary',key='loginbackbtn',shortcut='control+backspace'):
             st.session_state['is_logged_in'] = False
             del st.session_state.student_data
+            st.query_params.clear()
             st.rerun()
-
-    st.space()
 
     c1, c2 = st.columns(2)
 
@@ -104,10 +103,9 @@ def student_screen():
             st.session_state.pop("student_data", None)
             st.session_state["is_logged_in"] = False
             st.session_state.pop("user_role", None)
+            st.query_params.clear()
             st.rerun()
 
-    st.space()
-    st.space()
     st.header("Login using FaceID",text_alignment='center')
 
     show_registration = False

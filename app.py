@@ -6,6 +6,8 @@ from src.screens.student_screen import student_screen
 from src.components.dialog_auto_enroll import auto_enroll_dialog
 
 
+from src.database.db import get_student_by_id, get_teacher_by_id
+
 def main():
 
     st.set_page_config(
@@ -14,50 +16,60 @@ def main():
     )
 
     # -----------------------------------------
-    # Initialize session state
+    # RESTORE OR SYNC SESSION FROM QUERY PARAMS
     # -----------------------------------------
 
-    if 'login_type' not in st.session_state:
-        st.session_state['login_type'] = None
+    param_role = st.query_params.get('role')
+    param_uid = st.query_params.get('uid')
+    param_page = st.query_params.get('page')
 
-    if 'user_role' not in st.session_state:
+    # If URL specifies a logged-in user, restore session
+    if param_role == 'student' and param_uid:
+        if not st.session_state.get('is_logged_in') or st.session_state.get('user_role') != 'student':
+            student = get_student_by_id(param_uid)
+            if student:
+                st.session_state['is_logged_in'] = True
+                st.session_state['user_role'] = 'student'
+                st.session_state['student_data'] = student
+            else:
+                st.query_params.clear()
+
+    elif param_role == 'teacher' and param_uid:
+        if not st.session_state.get('is_logged_in') or st.session_state.get('user_role') != 'teacher':
+            teacher = get_teacher_by_id(param_uid)
+            if teacher:
+                st.session_state['is_logged_in'] = True
+                st.session_state['user_role'] = 'teacher'
+                st.session_state['teacher_data'] = teacher
+            else:
+                st.query_params.clear()
+
+    # If URL specifies page (e.g. ?page=student or ?page=teacher), or if empty (home)
+    if not st.session_state.get('is_logged_in'):
         st.session_state['user_role'] = None
-
-    if 'is_logged_in' not in st.session_state:
-        st.session_state['is_logged_in'] = False
+        if param_page in ['student', 'teacher']:
+            st.session_state['login_type'] = param_page
+        else:
+            # If user pressed browser Back to reach root "/" or unknown page
+            st.session_state['login_type'] = None
 
     # -----------------------------------------
-    # AUTHENTICATED USER ROUTING
+    # ROUTING
     # -----------------------------------------
 
-    user_role = st.session_state.get('user_role')
-
-    if user_role == 'student':
-
+    if st.session_state.get('is_logged_in') and st.session_state.get('user_role') == 'student':
         student_screen()
 
-    elif user_role == 'teacher':
-
+    elif st.session_state.get('is_logged_in') and st.session_state.get('user_role') == 'teacher':
         teacher_screen()
 
-    # -----------------------------------------
-    # LOGIN SCREEN ROUTING
-    # -----------------------------------------
-
-    elif st.session_state['login_type'] == 'student':
-
+    elif st.session_state.get('login_type') == 'student':
         student_screen()
 
-    elif st.session_state['login_type'] == 'teacher':
-
+    elif st.session_state.get('login_type') == 'teacher':
         teacher_screen()
-
-    # -----------------------------------------
-    # HOME SCREEN
-    # -----------------------------------------
 
     else:
-
         home_screen()
 
     # -----------------------------------------

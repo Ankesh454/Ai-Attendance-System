@@ -37,6 +37,18 @@ def get_all_students():
     response = supabase.table("students").select("*").execute()
     return response.data
 
+def get_student_by_id(student_id):
+    response = supabase.table("students").select("*").eq("student_id", student_id).execute()
+    if response.data:
+        return response.data[0]
+    return None
+
+def get_teacher_by_id(teacher_id):
+    response = supabase.table("teachers").select("*").eq("teacher_id", teacher_id).execute()
+    if response.data:
+        return response.data[0]
+    return None
+
 def create_student(new_name, face_embedding=None, voice_embedding=None):
     data = {'name': new_name, 'face_embedding': face_embedding, 'voice_embedding': voice_embedding}
     response = supabase.table("students").insert(data).execute()

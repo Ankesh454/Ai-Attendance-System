@@ -66,6 +66,7 @@ def home_screen():
         st.image("student.png", width=100)
         if st.button('Student Portal',type='primary',icon=':material/arrow_outward:',icon_position='right'):
             st.session_state['login_type'] = 'student'
+            st.query_params['page'] = 'student'
             st.rerun()
 
     with col2:
@@ -80,6 +81,7 @@ def home_screen():
         st.image("teacher.png", width=100)
         if st.button('Teacher Portal',type='primary',icon=':material/arrow_outward:',icon_position='right'):
             st.session_state['login_type'] = 'teacher'
+            st.query_params['page'] = 'teacher'
             st.rerun()
 
     footer_home()

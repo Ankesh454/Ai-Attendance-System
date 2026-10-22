@@ -23,6 +23,7 @@ from src.pipelines.face_pipeline import predict_attendance
 from src.database.config import supabase
 
 from datetime import datetime
+import time
 
 import numpy as np
 import pandas as pd
@@ -80,9 +81,8 @@ def teacher_dashboard():
             if "teacher_data" in st.session_state:
                 del st.session_state.teacher_data
 
+            st.query_params.clear()
             st.rerun()
-
-    st.space()
 
     if "current_teacher_tab" not in st.session_state:
         st.session_state.current_teacher_tab = 'take_attendance'
@@ -261,7 +261,6 @@ def teacher_tab_manage_subjects():
             def share_btn():
                 if st.button(f"Share Code: {sub['name']}",key=f"share_{sub['subject_code']}",icon=":material/share:"):
                     share_subject_dialog(sub['name'],sub['subject_code'])
-                st.space()
 
             subject_card(
                 name=sub['name'],
@@ -449,13 +448,10 @@ def teacher_screen_login():
     with c2:
         if st.button("Go back to Home",type='secondary',key='loginbackbtn',shortcut='control+backspace'):
             st.session_state['login_type'] = None
+            st.query_params.clear()
             st.rerun()
 
-    st.space()
-
     st.header('Login using password',text_alignment='center')
-
-    st.space()
 
     teacher_username = st.text_input(
         "Enter username",
@@ -487,7 +483,6 @@ def teacher_screen_login():
             st.session_state.teacher_login_type = 'register'
             st.rerun()
 
-    st.space()
     # Forgot Password
     if st.button("Forgot Password?",width='stretch',type='tertiary',):
         st.session_state.teacher_login_type = 'forgot_password'
@@ -543,11 +538,10 @@ def teacher_screen_register():
     with c2:
         if st.button("Go back to Home",type='secondary',key='loginbackbtn',shortcut='control+backspace'):
             st.session_state['login_type'] = None
+            st.query_params.clear()
             st.rerun()
-    st.space()
 
     st.header('Register your teacher profile')
-    st.space()
 
     teacher_username = st.text_input(
         "Enter username",
