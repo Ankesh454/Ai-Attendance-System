@@ -77,10 +77,7 @@ def teacher_dashboard():
             st.session_state['is_logged_in'] = False
             st.session_state['user_role'] = None
             st.session_state['login_type'] = None
-
-            if "teacher_data" in st.session_state:
-                del st.session_state.teacher_data
-
+            st.session_state.pop('teacher_data', None)
             st.query_params.clear()
             st.rerun()
 
@@ -351,6 +348,10 @@ def login_teacher(username, password):
         st.session_state.user_role = "teacher"
         st.session_state.teacher_data = teacher
         st.session_state.is_logged_in = True
+        st.query_params['role'] = 'teacher'
+        st.query_params['uid'] = str(teacher['teacher_id'])
+        if 'page' in st.query_params:
+            del st.query_params['page']
 
         return True
 

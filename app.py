@@ -5,6 +5,7 @@ from src.screens.teacher_screen import teacher_screen
 from src.screens.student_screen import student_screen
 from src.components.dialog_auto_enroll import auto_enroll_dialog
 
+import streamlit.components.v1 as components
 
 from src.database.db import get_student_by_id, get_teacher_by_id
 
@@ -14,6 +15,19 @@ def main():
         page_title="SnapShot Class - Making Attendance Faster.",
         page_icon="https://imgs.search.brave.com/nn0vWgrqwbB-BFhhb1Uh45KDTNuepnm9N_M8KivT5Gc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/bWFnbmlmaWMuY29t/L2ZyZWUtdmVjdG9y/L3ZlY3Rvci12aW50/YWdlLWNhbWVyYV81/Mzg3Ni0zNjY4MC5q/cGc_c2VtdD1haXNf/aHlicmlkJnc9NzQw/JnE9ODA"
     )
+
+    # Force reload on browser back/forward so Streamlit re-reads query params
+    components.html("""
+        <script>
+            const parentWindow = window.parent;
+            if (!parentWindow._popstateListenerAdded) {
+                parentWindow._popstateListenerAdded = true;
+                parentWindow.addEventListener('popstate', function() {
+                    parentWindow.location.reload();
+                });
+            }
+        </script>
+    """, height=0)
 
     # -----------------------------------------
     # RESTORE OR SYNC SESSION FROM QUERY PARAMS
